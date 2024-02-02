@@ -1,0 +1,11 @@
+.create-post-card {
+  text-align: center;
+  margin: 3% auto;
+  max-width: 550px;
+  padding: 5% 5% 2% 5%;
+}
+
+input:-webkit-autofill + label {
+  font-size: 0.8rem;
+  transform: translateY(-140%);
+}

@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Share+Tech&display=swap");
+
+.card-title {
+  font-family: "Share Tech", sans-serif !important;
+  font-size: xx-large !important;
+}
+
+.input-field input:focus {
+  border-bottom: 1px solid #0277bd !important;
+  box-shadow: 0 1px 0 0 #0277bd !important;
+}
+
+.login-container {
+  padding: 3%;
+  max-width: 50%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.login-card {
+  padding: 3%;
+}
+
+#toast-container {
+  top: 70% !important;
+  right: 30% !important;
+  left: 30% !important;
+}
