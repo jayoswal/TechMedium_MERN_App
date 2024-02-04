@@ -83,5 +83,63 @@ router.get("/post/myPost", protectedResource, (req, res) => {
     });
 });
 
+// PATCH - /post/upvote
+router.patch("/post/upvote", protectedResource, (req, res) => {
+  PostModel.findByIdAndUpdate(
+    req.body.postId,
+    {
+      $push: {
+        upvote: req.user._id,
+      },
+      $pull: {
+        downvote: req.user._id,
+      },
+    },
+    {
+      new: true, // return updated post
+    }
+  )
+    .exec()
+    .then((result) => {
+      res.status(200).json({
+        success: result,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        error: "Error upvoting post...",
+      });
+    });
+});
+
+// PATCH - /post/downvote
+router.patch("/post/downvote", protectedResource, (req, res) => {
+  PostModel.findByIdAndUpdate(
+    req.body.postId,
+    {
+      $pull: {
+        upvote: req.user._id,
+      },
+      $push: {
+        downvote: req.user._id,
+      },
+    },
+    {
+      new: true,
+    }
+  )
+    .exec()
+    .then((result) => {
+      res.status(200).json({
+        success: result,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        error: "Error upvoting post...",
+      });
+    });
+});
+
 // export the route
 module.exports = router;

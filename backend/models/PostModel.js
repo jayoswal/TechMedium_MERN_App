@@ -22,6 +22,20 @@ const PostModel = new mongoose.Schema({
     type: Date,
   },
 
+  upvote: [
+    {
+      type: ObjectId,
+      ref: "UserModel",
+    },
+  ],
+
+  downvote: [
+    {
+      type: ObjectId,
+      ref: "UserModel",
+    },
+  ],
+
   author: {
     type: ObjectId,
     ref: "UserModel",

@@ -44,9 +44,6 @@ export const LoginPage = () => {
         }
         // check token field means success
         else if (jsonResponse.token) {
-          // clog all jsonResponse
-          console.log(jsonResponse);
-
           M.toast({
             html: "Welcome back " + jsonResponse.userInfo.name,
             classes: "#2e7d32 green darken-3",
