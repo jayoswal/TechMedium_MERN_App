@@ -3,10 +3,8 @@
   height: max-content;
   margin: 2% auto;
 
-  img{
+  img {
     height: 300px;
     object-fit: contains;
   }
 }
-
-

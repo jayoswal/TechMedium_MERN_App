@@ -62,8 +62,8 @@ router.post("/comment/add", protectedResource, async (req, res) => {
 });
 
 // GET - GET all post of a post
-router.get("/comment/get", protectedResource, (req, res) => {
-  const { postId } = req.body;
+router.get("/comment/get/:postId", protectedResource, (req, res) => {
+  const postId = req.params.postId;
   if (!postId) {
     return res.status(400).json({
       error: "Cannot have empty field",
