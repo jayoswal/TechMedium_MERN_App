@@ -16,6 +16,7 @@ mongoose.connection.on("error", (err) => {
 });
 require("./models/UserModel");
 require("./models/PostModel");
+require("./models/CommentModel");
 
 const PORT = 4000;
 
@@ -34,6 +35,7 @@ const middleware = (req, res, next) => {
 app.use(express.json());
 app.use(require("./routes/Auth"));
 app.use(require("./routes/PostRoutes"));
+app.use(require("./routes/CommentRoutes"));
 
 // // get
 // app.get('/', (req, res) => {

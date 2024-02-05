@@ -99,6 +99,7 @@ router.patch("/post/upvote", protectedResource, (req, res) => {
       new: true, // return updated post
     }
   )
+    .populate("author", "_id name")
     .exec()
     .then((result) => {
       res.status(200).json({
@@ -128,6 +129,7 @@ router.patch("/post/downvote", protectedResource, (req, res) => {
       new: true,
     }
   )
+    .populate("author", "_id name")
     .exec()
     .then((result) => {
       res.status(200).json({

@@ -9,6 +9,7 @@ export const HomePage = () => {
   const { state, dispatch } = useContext(UserContext);
 
   // since pathch returned object only contains author's id and not name
+  // used .populate instead in banckend post route
   const updatedPostWithAuthorInfo = (updatedPost, oldPost) => {
     const { author: oldAuthor, ...restOfOldPost } = oldPost;
 
@@ -54,7 +55,7 @@ export const HomePage = () => {
         setPosts((posts) => {
           return posts.map((oldPost) =>
             oldPost._id === updatedPost.success._id
-              ? updatedPostWithAuthorInfo(updatedPost.success, oldPost)
+              ? updatedPost.success
               : oldPost
           );
         });
