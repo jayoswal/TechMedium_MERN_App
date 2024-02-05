@@ -40,6 +40,13 @@ const PostModel = new mongoose.Schema({
     type: ObjectId,
     ref: "UserModel",
   },
+
+  comment: [
+    {
+      type: ObjectId,
+      ref: "CommentModel",
+    },
+  ],
 });
 
 mongoose.model("PostModel", PostModel);

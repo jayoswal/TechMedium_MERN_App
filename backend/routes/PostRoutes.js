@@ -51,6 +51,7 @@ router.post("/post/create", protectedResource, (req, res) => {
 // GET - get all posts of all users
 router.get("/post/all", protectedResource, (req, res) => {
   PostModel.find()
+    .select("-comment")
     .sort(dateSort)
     .populate("author", "_id name")
     .then((allPosts) => {
@@ -69,6 +70,7 @@ router.get("/post/all", protectedResource, (req, res) => {
 // Get posts of logged in user
 router.get("/post/myPost", protectedResource, (req, res) => {
   PostModel.find({ author: req.user._id })
+    .select("-comment")
     .sort(dateSort)
     .then((allPosts) => {
       res.status(200).json({
@@ -100,6 +102,7 @@ router.patch("/post/upvote", protectedResource, (req, res) => {
     }
   )
     .populate("author", "_id name")
+    .lean("comment")
     .exec()
     .then((result) => {
       res.status(200).json({
@@ -130,6 +133,7 @@ router.patch("/post/downvote", protectedResource, (req, res) => {
     }
   )
     .populate("author", "_id name")
+    .lean("comment")
     .exec()
     .then((result) => {
       res.status(200).json({

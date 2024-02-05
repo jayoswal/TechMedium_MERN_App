@@ -2,7 +2,7 @@
 
 ---
 
-#### Platform for tech enthusiasts to share content, upvote and downvote posts, follow favorite bloggers.
+#### Platform for tech enthusiasts to share content, upvote and downvote posts, comment on posts and follow favorite bloggers.
 
 ---
 

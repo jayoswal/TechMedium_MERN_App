@@ -20,33 +20,42 @@ const dateSort = {
 
 // POST - add comment
 router.post("/comment/add", protectedResource, async (req, res) => {
-  const { comment, postId } = req.body;
-  if (!comment || !postId) {
+  const { commentBody, postId } = req.body;
+  if (!commentBody || !postId) {
     return res.status(400).json({
       error: "Cannot have empty fields",
     });
   } else {
-    const post = await PostModel.findById(postId).then((post) => {
-      return post;
-    });
-    req.user.password = undefined;
     const Comment = new CommentModel({
-      comment: comment,
-      post: post,
-      author: req.user,
+      commentBody: commentBody,
+      commentedBy: req.user,
       date: new Date(),
     });
 
-    await Comment.save()
+    Comment.save()
       .then((savedComment) => {
-        return res.status(201).json({
-          success: "Comment Added",
-          savedComment,
-        });
+        PostModel.findByIdAndUpdate(
+          postId,
+          {
+            $push: {
+              comment: savedComment,
+            },
+          },
+          {
+            new: true,
+          }
+        )
+          .exec()
+          .then((result) => {
+            return res.status(200).json({
+              savedComment: savedComment,
+            });
+          })
+          .catch((error) => {});
       })
       .catch((error) => {
-        return res.status(500).json({
-          error: error,
+        res.status(500).json({
+          error: "Error Contact Admin",
         });
       });
   }
@@ -60,18 +69,24 @@ router.get("/comment/get", protectedResource, (req, res) => {
       error: "Cannot have empty field",
     });
   } else {
-    const comments = CommentModel.find({
-      postId: postId,
-    })
-      .sort(dateSort)
+    PostModel.findById(postId)
+      .select("comment")
+      .populate({
+        path: "comment",
+        populate: {
+          path: "commentedBy",
+          select: "_id name", // Specify the fields you want to select from UserModel
+        },
+      })
       .then((allComments) => {
         res.status(200).json({
-          allComments,
+          postComment: allComments,
         });
       })
       .catch((error) => {
-        return res.status(500).json({
-          error: "Error getting comments. contact admin",
+        console.log("error getting posts of logged in user");
+        res.status(500).json({
+          error: "Error fetching comments...",
         });
       });
   }
