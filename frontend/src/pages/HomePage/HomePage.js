@@ -30,6 +30,7 @@ export const HomePage = () => {
       .then((response) => response.json())
       .then((jsonResponse) => {
         setPosts(jsonResponse.allPosts);
+        // intialize modal here
         M.Modal.init(document.querySelectorAll(".modal"));
       })
       .catch((error) => {
@@ -37,7 +38,6 @@ export const HomePage = () => {
           html: "Error getting all posts",
           classes: "#c62828 red darken-3",
         });
-        M.Modal.init(document.querySelectorAll(".modal"));
       });
   }, []);
 
@@ -81,7 +81,7 @@ export const HomePage = () => {
     })
       .then((response) => response.json())
       .then((jsonResponse) => {
-        setComments(jsonResponse);
+        setComments(jsonResponse.postComment.comment);
       })
       .catch((error) => {
         M.toast({
@@ -92,18 +92,59 @@ export const HomePage = () => {
   }
 
   const CommentModal = (props) => {
-    const postId = props.postId;
+    const addNewComment = (event, postId) => {
+      event.preventDefault();
+      console.log(
+        "Adding new comment for post: ",
+        postId,
+        "Comment: ",
+        event.target[0].value
+      );
+      event.target[0].value = "";
+    };
 
     return (
-      <li className="collection-item avatar">
-        <img
-          src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBkZWZhdWx0fGVufDB8fDB8fHww"
-          alt=""
-          className="circle"
-        />
-        <span className="title">{postId}</span>
-        <p>commentBodyz</p>
-      </li>
+      <div className="col s12 m10 l6 offset-m1 offset-l3">
+        <ul className="collection">
+          <li className="collection-item avatar">
+            <img
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBkZWZhdWx0fGVufDB8fDB8fHww"
+              alt=""
+              className="circle"
+            />
+            <p>
+              <form onSubmit={(event) => addNewComment(event, props.postId)}>
+                <input type="text" placeholder="Enter your comment ..."></input>
+
+                <button
+                  className="secondary-content btn waves-effect waves-light"
+                  type="submit"
+                  name="action"
+                >
+                  <i className="material-icons ">send</i>
+                </button>
+              </form>
+            </p>
+          </li>
+
+          {/* loop should start */}
+          {comments.map((comment) => {
+            return (
+              <li className="collection-item avatar" key={comment._id}>
+                <img
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBkZWZhdWx0fGVufDB8fDB8fHww"
+                  alt=""
+                  className="circle"
+                />
+                <span className="title">{comment.commentedBy.name}</span>
+                <p>{comment.commentBody}</p>
+              </li>
+            );
+          })}
+
+          {/* loop should end here */}
+        </ul>
+      </div>
     );
   };
 
@@ -198,7 +239,7 @@ export const HomePage = () => {
                   {/* Modal start */}
                   {/* <!-- Modal Trigger --> */}
                   <a
-                    className="waves-effect waves-light btn modal-trigger"
+                    className="waves-effect waves-light  modal-trigger"
                     href="#modal1"
                   >
                     <i
@@ -209,31 +250,11 @@ export const HomePage = () => {
                     </i>
                   </a>
 
+                  {/* Modal Content */}
                   <div id="modal1" className="modal bottom-sheet">
                     <div className="modal-content">
                       <div className="row">
-                        <div className="col s12 m10 l6 offset-m1 offset-l3">
-                          <ul className="collection">
-                            <li className="collection-item avatar">
-                              <img
-                                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHByb2ZpbGUlMjBkZWZhdWx0fGVufDB8fDB8fHww"
-                                alt=""
-                                className="circle"
-                              />
-                              <p>
-                                <input
-                                  type="text"
-                                  placeholder="Enter your comment ..."
-                                ></input>
-                              </p>
-                              <a href="#!" className="secondary-content">
-                                <i className="material-icons">send</i>
-                              </a>
-                            </li>
-
-                            <CommentModal postId={post._id} />
-                          </ul>
-                        </div>
+                        <CommentModal postId={post._id} />
                       </div>
                     </div>
                   </div>

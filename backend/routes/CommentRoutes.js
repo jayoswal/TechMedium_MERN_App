@@ -70,9 +70,11 @@ router.get("/comment/get/:postId", protectedResource, (req, res) => {
     });
   } else {
     PostModel.findById(postId)
+      .sort(dateSort)
       .select("comment")
       .populate({
         path: "comment",
+        options: { sort: { date: -1 } },
         populate: {
           path: "commentedBy",
           select: "_id name", // Specify the fields you want to select from UserModel
